@@ -16,8 +16,10 @@
         git fetch origin
         git pull origin master
 # Open Visual Stucio Code
-
 * Open Terminal
 * $ composer update
 * $ php artisan migrate
 * $ php artisan serve
+
+# Dokumentasi Postmant
+https://documenter.getpostman.com/view/27279273/2sA3s9E9BA
