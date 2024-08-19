@@ -25,10 +25,7 @@ class BarangController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Validation failed field not null',
-            ], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $kodeUnik = $this->codeGenerator->generate();
@@ -90,10 +87,7 @@ class BarangController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Validation failed field not null',
-            ], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $barang = Barang::find($id);

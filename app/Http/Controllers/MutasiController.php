@@ -13,17 +13,14 @@ class MutasiController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'tanggal' => 'required|date',
+            'tanggal' => 'required|date_format:Y-m-d',
             'jumlah' => 'required|integer',
             'userId' => 'required|exists:users,id',
             'barangId' => 'required|exists:barangs,id',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => '0',
-                'message' => 'Validation failed field not null',
-            ], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
          $barang = Barang::findOrFail($request->barangId);
