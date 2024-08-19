@@ -20,6 +20,7 @@ class BarangController extends Controller
             'namaBarang' => 'required',
             'kategory' => 'required',
             'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
         ]);
         $kodeUnik = $this->codeGenerator->generate();
         $barang = new Barang([
@@ -27,6 +28,7 @@ class BarangController extends Controller
             'namaBarang' => $request->get('namaBarang'),
             'kategory' => $request->get('kategory'),
             'harga' => $request->get('harga'),
+            'stok' => $request->get('stok'),
         ]);
 
         $barang->save();
@@ -76,6 +78,7 @@ class BarangController extends Controller
             'namaBarang' => 'required',
             'kategory' => 'required',
             'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
         ]);
 
         $barang = Barang::find($id);
@@ -85,6 +88,7 @@ class BarangController extends Controller
                 'namaBarang' => $request->get('namaBarang'),
                 'kategory' => $request->get('kategory'),
                 'harga' => $request->get('harga'),
+                'stok' => $request->get('stok'),
             ]);
 
             return response()->json([

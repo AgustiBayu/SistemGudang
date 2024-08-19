@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\MutasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('barang', BarangController::class);
+    Route::post('/mutasi', [MutasiController::class, 'mutasiMasuk']);
+    Route::get('/mutasi', [MutasiController::class, 'mutasi']);
+    Route::delete('/mutasi/{id}', [MutasiController::class, 'hapusMutasi']);
 });
 
