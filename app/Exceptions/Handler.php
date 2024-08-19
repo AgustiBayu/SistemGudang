@@ -62,14 +62,14 @@ class Handler extends ExceptionHandler
             \Log::info('AuthenticationException thrown: '.$exception->getMessage());
 
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Token tidak valid atau tidak ditemukan.'
             ], 403);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Metode HTTP tidak diizinkan untuk endpoint ini.'
             ], 405); // Mengembalikan 405 Method Not Allowed
         }
