@@ -82,12 +82,19 @@ class BarangController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'namaBarang' => 'required',
             'kategory' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Validation failed field not null',
+            ], 422);
+        }
 
         $barang = Barang::find($id);
 
