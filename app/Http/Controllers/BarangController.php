@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Service\CodeGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
@@ -16,12 +17,20 @@ class BarangController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'namaBarang' => 'required',
             'kategory' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Validation failed field not null',
+            ], 422);
+        }
+
         $kodeUnik = $this->codeGenerator->generate();
         $barang = new Barang([
             'kode' => $kodeUnik,
@@ -32,9 +41,8 @@ class BarangController extends Controller
         ]);
 
         $barang->save();
-
         return response()->json([
-            'status' => 'success',
+            'status' => '1',
             'message' => 'Barang berhasil ditambahkan!',
             'data' => $barang
         ], 201);
@@ -46,12 +54,12 @@ class BarangController extends Controller
 
         if ($barang) {
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Barang tidak ditemukan.'
             ], 404);
         }
@@ -62,12 +70,12 @@ class BarangController extends Controller
 
         if ($barang) {
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Barang tidak ditemukan.'
             ], 404);
         }
@@ -92,13 +100,13 @@ class BarangController extends Controller
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'message' => 'Barang berhasil diperbarui!',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Barang tidak ditemukan.'
             ], 404);
         }
@@ -111,12 +119,12 @@ class BarangController extends Controller
             $barang->delete();
 
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'message' => 'Barang berhasil dihapus!'
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Barang tidak ditemukan.'
             ], 404);
         }

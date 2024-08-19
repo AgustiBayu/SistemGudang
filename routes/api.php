@@ -21,13 +21,15 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('barang', BarangController::class);
+    Route::apiResource('barang', BarangController::class)->only([
+        'index', 'store', 'show', 'update', 'destroy'
+    ]);
     Route::post('/mutasi', [MutasiController::class, 'mutasiMasuk']);
     Route::get('/mutasi', [MutasiController::class, 'mutasi']);
     Route::delete('/mutasi/{id}', [MutasiController::class, 'hapusMutasi']);
 });
-

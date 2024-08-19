@@ -5,24 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\Mutasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MutasiController extends Controller
 {
     public function mutasiMasuk(Request $request)
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jumlah' => 'required|integer',
             'userId' => 'required|exists:users,id',
             'barangId' => 'required|exists:barangs,id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Validation failed field not null',
+            ], 422);
+        }
+
          $barang = Barang::findOrFail($request->barangId);
          $hargaBarang = $barang->harga;
 
          if ($request->jumlah > $barang->stok) {
              return response()->json([
-                 'status' => 'error',
+                 'status' => '0',
                  'message' => 'Jumlah yang dikeluarkan melebihi stok yang tersedia.'
              ], 400);
          }
@@ -40,7 +49,7 @@ class MutasiController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => '1',
             'message' => 'Mutasi masuk berhasil ditambahkan!',
             'data' => $mutasi
         ], 201);
@@ -52,12 +61,12 @@ class MutasiController extends Controller
 
         if ($mutasi) {
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'data' => $mutasi
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Mutasi tidak ditemukan.'
             ], 404);
         }
@@ -70,12 +79,12 @@ class MutasiController extends Controller
             $mutasi->delete();
 
             return response()->json([
-                'status' => 'success',
+                'status' => '1',
                 'message' => 'Mutasi berhasil dihapus!'
             ], 200);
         } else {
             return response()->json([
-                'status' => 'error',
+                'status' => '0',
                 'message' => 'Mutasi tidak ditemukan.'
             ], 404);
         }

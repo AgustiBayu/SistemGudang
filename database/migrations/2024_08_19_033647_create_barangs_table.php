@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('barangs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("kode");
-            $table->string('namaBarang');
-            $table->string("kategory");
-            $table->integer("harga");
-            $table->integer("stok");
+            $table->string("kode")->nullable(false);
+            $table->string('namaBarang')->nullable(false);
+            $table->string("kategory")->nullable(false);
+            $table->integer("harga")->nullable(false);
+            $table->integer("stok")->nullable(false);
             $table->timestamps();
         });
     }

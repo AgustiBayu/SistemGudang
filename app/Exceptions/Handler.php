@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,5 +47,33 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'status' => '0',
+                'message' => 'Endpoint tidak ditemukan.'
+            ], 404);
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            \Log::info('AuthenticationException thrown: '.$exception->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token tidak valid atau tidak ditemukan.'
+            ], 403);
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Metode HTTP tidak diizinkan untuk endpoint ini.'
+            ], 405); // Mengembalikan 405 Method Not Allowed
+        }
+
+        return parent::render($request, $exception);
     }
 }
