@@ -19,7 +19,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => '0',
+                'message' => 'failed',
+                'data' => $validator->errors()
+            ], 422);
         }
 
         $user = User::create([
@@ -29,7 +33,8 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => '1',
+            'message' => 'success',
             'data' => $user
         ], 201);
     }
@@ -41,7 +46,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => '0',
+                'message' => 'failed',
+                'data' => $validator->errors()
+            ], 422);
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -52,8 +61,9 @@ class AuthController extends Controller
         $token = $user->createToken('Personal Access Token')->plainTextToken;
 
         return response()->json([
-            'status' => 'success',
-            'token' => $token
+            'status' => '1',
+            'message' => 'success',
+            'token' => 'Bearer '. $token
         ], 200);
     }
 }

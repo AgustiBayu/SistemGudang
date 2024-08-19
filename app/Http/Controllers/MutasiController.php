@@ -20,7 +20,11 @@ class MutasiController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => '0',
+                'message' => 'failed',
+                'data' => $validator->errors()
+            ], 422);
         }
 
          $barang = Barang::findOrFail($request->barangId);
@@ -47,7 +51,7 @@ class MutasiController extends Controller
 
         return response()->json([
             'status' => '1',
-            'message' => 'Mutasi masuk berhasil ditambahkan!',
+            'message' => 'success',
             'data' => $mutasi
         ], 201);
     }
@@ -59,12 +63,13 @@ class MutasiController extends Controller
         if ($mutasi) {
             return response()->json([
                 'status' => '1',
+                'message' => 'success',
                 'data' => $mutasi
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Mutasi tidak ditemukan.'
+                'message' => 'failed.'
             ], 404);
         }
     }
@@ -77,12 +82,12 @@ class MutasiController extends Controller
 
             return response()->json([
                 'status' => '1',
-                'message' => 'Mutasi berhasil dihapus!'
+                'message' => 'success'
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Mutasi tidak ditemukan.'
+                'message' => 'failed'
             ], 404);
         }
     }

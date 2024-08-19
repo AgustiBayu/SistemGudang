@@ -18,14 +18,18 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'namaBarang' => 'required',
+            'namaBarang' => 'required|unique:barangs',
             'kategory' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => '0',
+                'message' => 'failed',
+                'data' => $validator->errors()
+            ], 422);
         }
 
         $kodeUnik = $this->codeGenerator->generate();
@@ -40,7 +44,7 @@ class BarangController extends Controller
         $barang->save();
         return response()->json([
             'status' => '1',
-            'message' => 'Barang berhasil ditambahkan!',
+            'message' => 'success',
             'data' => $barang
         ], 201);
     }
@@ -52,12 +56,13 @@ class BarangController extends Controller
         if ($barang) {
             return response()->json([
                 'status' => '1',
+                'message' => 'success',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Barang tidak ditemukan.'
+                'message' => 'failed'
             ], 404);
         }
     }
@@ -68,26 +73,31 @@ class BarangController extends Controller
         if ($barang) {
             return response()->json([
                 'status' => '1',
+                'message' => 'success',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Barang tidak ditemukan.'
+                'message' => 'failed'
             ], 404);
         }
     }
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'namaBarang' => 'required',
+            'namaBarang' => 'required|unique:barangs',
             'kategory' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => '0',
+                'message' => 'failed',
+                'data' => $validator->errors()
+            ], 422);
         }
 
         $barang = Barang::find($id);
@@ -102,13 +112,13 @@ class BarangController extends Controller
 
             return response()->json([
                 'status' => '1',
-                'message' => 'Barang berhasil diperbarui!',
+                'message' => 'success',
                 'data' => $barang
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Barang tidak ditemukan.'
+                'message' => 'failed'
             ], 404);
         }
     }
@@ -121,12 +131,12 @@ class BarangController extends Controller
 
             return response()->json([
                 'status' => '1',
-                'message' => 'Barang berhasil dihapus!'
+                'message' => 'success'
             ], 200);
         } else {
             return response()->json([
                 'status' => '0',
-                'message' => 'Barang tidak ditemukan.'
+                'message' => 'failed'
             ], 404);
         }
     }
